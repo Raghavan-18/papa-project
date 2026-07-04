@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Check Eligibility - GovAssist</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 120px auto 60px;
+            padding: 0 20px;
+        }
+
+        .progress-bar-container {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-bottom: 40px;
+        }
+
+        .progress-bar-container::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            width: 100%;
+            height: 4px;
+            background: var(--card-border);
+            z-index: 1;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%);
+            height: 4px;
+            background: var(--gradient-accent);
+            z-index: 1;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+
+        .step-indicator {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--darker-bg);
+            border: 2px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            position: relative;
+            z-index: 2;
+            transition: all 0.3s ease;
+            color: var(--gray-text);
+        }
+
+        .step-indicator.active {
+            border-color: var(--accent-cyan);
+            background: var(--primary-blue);
+            color: white;
+            box-shadow: 0 0 15px rgba(6, 182, 212, 0.4);
+        }
+
+        .step-indicator.completed {
+            background: var(--accent-cyan);
+            border-color: var(--accent-cyan);
+            color: white;
+        }
+
+        .form-step {
+            display: none;
+            animation: slideInRight 0.4s ease forwards;
+        }
+
+        .form-step.active {
+            display: block;
+        }
+
+        @keyframes slideInRight {
+            from { opacity: 0; transform: translateX(30px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .form-navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid var(--card-border);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-brand">
+                <i class="fa-solid fa-landmark-dome"></i> GovAssist
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="results.html">Schemes</a>
+                <a href="eligibility.html" style="color: var(--accent-cyan)">Eligibility</a>
+                <a href="chatbot.html">Chatbot</a>
+                <a href="profile.html">Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="form-container">
+        <div class="text-center mb-4">
+            <h2 class="text-gradient">Check Your Eligibility</h2>
+            <p>Complete your profile to discover schemes tailored for you</p>
+        </div>
+
+        <div class="glass-card">
+            <!-- Progress Bar -->
+            <div class="progress-bar-container">
+                <div class="progress-line" id="progressLine"></div>
+                <div class="step-indicator active" data-step="1">1</div>
+                <div class="step-indicator" data-step="2">2</div>
+                <div class="step-indicator" data-step="3">3</div>
+            </div>
+
+            <form id="eligibilityForm">
+                <!-- Step 1: Personal Details -->
+                <div class="form-step active" id="step1">
+                    <h3 class="mb-3">Personal Details</h3>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Full Name</label>
+                            <input type="text" class="form-control" required placeholder="As per Aadhaar">
+                        </div>
+                        <div class="input-group">
+                            <label>Age</label>
+                            <input type="number" class="form-control" required placeholder="Years">
+                        </div>
+                        <div class="input-group">
+                            <label>Gender</label>
+                            <select class="form-control" required>
+                                <option value="">Select Gender</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="transgender">Transgender</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Category (Caste)</label>
+                            <select class="form-control" required>
+                                <option value="">Select Category</option>
+                                <option value="general">General</option>
+                                <option value="obc">OBC</option>
+                                <option value="sc">SC</option>
+                                <option value="st">ST</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 2: Location & Status -->
+                <div class="form-step" id="step2">
+                    <h3 class="mb-3">Location & Status</h3>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>State</label>
+                            <select class="form-control" required>
+                                <option value="">Select State</option>
+                                <option value="an">Andaman and Nicobar Islands</option>
+                                <option value="ap">Andhra Pradesh</option>
+                                <option value="ar">Arunachal Pradesh</option>
+                                <option value="as">Assam</option>
+                                <option value="br">Bihar</option>
+                                <option value="ch">Chandigarh</option>
+                                <option value="ct">Chhattisgarh</option>
+                                <option value="dn">Dadra and Nagar Haveli and Daman and Diu</option>
+                                <option value="dl">Delhi</option>
+                                <option value="ga">Goa</option>
+                                <option value="gj">Gujarat</option>
+                                <option value="hr">Haryana</option>
+                                <option value="hp">Himachal Pradesh</option>
+                                <option value="jk">Jammu and Kashmir</option>
+                                <option value="jh">Jharkhand</option>
+                                <option value="ka">Karnataka</option>
+                                <option value="kl">Kerala</option>
+                                <option value="la">Ladakh</option>
+                                <option value="ld">Lakshadweep</option>
+                                <option value="mp">Madhya Pradesh</option>
+                                <option value="mh">Maharashtra</option>
+                                <option value="mn">Manipur</option>
+                                <option value="ml">Meghalaya</option>
+                                <option value="mz">Mizoram</option>
+                                <option value="nl">Nagaland</option>
+                                <option value="or">Odisha</option>
+                                <option value="py">Puducherry</option>
+                                <option value="pb">Punjab</option>
+                                <option value="rj">Rajasthan</option>
+                                <option value="sk">Sikkim</option>
+                                <option value="tn">Tamil Nadu</option>
+                                <option value="tg">Telangana</option>
+                                <option value="tr">Tripura</option>
+                                <option value="up">Uttar Pradesh</option>
+                                <option value="ut">Uttarakhand</option>
+                                <option value="wb">West Bengal</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>District</label>
+                            <input type="text" class="form-control" required placeholder="Enter District">
+                        </div>
+                        <div class="input-group">
+                            <label>BPL Status</label>
+                            <select class="form-control" required>
+                                <option value="">Are you Below Poverty Line?</option>
+                                <option value="yes">Yes</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Disability Status</label>
+                            <select class="form-control" required>
+                                <option value="no">None</option>
+                                <option value="yes">Yes</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Step 3: Education & Work -->
+                <div class="form-step" id="step3">
+                    <h3 class="mb-3">Education & Work</h3>
+                    <div class="form-grid">
+                        <div class="input-group">
+                            <label>Education Level</label>
+                            <select class="form-control" required>
+                                <option value="">Select Education</option>
+                                <option value="below_10">Below 10th</option>
+                                <option value="10th">10th Pass</option>
+                                <option value="12th">12th Pass</option>
+                                <option value="graduate">Graduate</option>
+                                <option value="postgraduate">Post Graduate</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Occupation</label>
+                            <select class="form-control" required>
+                                <option value="">Select Occupation</option>
+                                <option value="student">Student</option>
+                                <option value="farmer">Farmer</option>
+                                <option value="salaried">Salaried/Employee</option>
+                                <option value="business">Business/Self-Employed</option>
+                                <option value="unemployed">Unemployed</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label>Annual Family Income (₹)</label>
+                            <input type="number" class="form-control" required placeholder="e.g. 250000">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Form Navigation -->
+                <div class="form-navigation">
+                    <button type="button" class="btn btn-outline" id="prevBtn" style="display: none;">
+                        <i class="fa-solid fa-arrow-left"></i> Previous
+                    </button>
+                    <button type="button" class="btn btn-primary btn-glow" id="nextBtn" style="margin-left: auto;">
+                        Save & Continue <i class="fa-solid fa-arrow-right"></i>
+                    </button>
+                    <button type="submit" class="btn btn-primary btn-glow" id="submitBtn" style="display: none; margin-left: auto;">
+                        <i class="fa-solid fa-microchip"></i> Start AI Verification
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script src="eligibility.js"></script>
+</body>
+</html>

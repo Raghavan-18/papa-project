@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eligible Schemes - GovAssist</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .results-container {
+            padding: 100px 20px 60px;
+        }
+
+        .header-section {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .filters-container {
+            display: flex;
+            gap: 15px;
+            background: var(--card-bg);
+            padding: 15px;
+            border-radius: 12px;
+            border: 1px solid var(--card-border);
+            flex-wrap: wrap;
+        }
+
+        .search-box {
+            position: relative;
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray-text);
+        }
+
+        .search-box input {
+            padding-left: 40px;
+            width: 250px;
+        }
+
+        .schemes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 30px;
+        }
+
+        .scheme-card {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .eligibility-badge {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--gradient-primary);
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 700;
+            box-shadow: 0 4px 10px rgba(37, 99, 235, 0.3);
+        }
+
+        .category-tag {
+            display: inline-block;
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent-cyan);
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+
+        .scheme-card h3 {
+            font-size: 1.4rem;
+            margin-bottom: 10px;
+            color: var(--white-text);
+        }
+
+        .scheme-info {
+            flex-grow: 1;
+            margin-bottom: 20px;
+        }
+        
+        .info-list {
+            list-style: none;
+            margin-top: 15px;
+            margin-bottom: 15px;
+        }
+
+        .info-list li {
+            font-size: 0.9rem;
+            color: var(--gray-text);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .info-list li i {
+            color: var(--accent-cyan);
+            margin-top: 4px;
+        }
+
+        .card-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: auto;
+        }
+
+        .card-actions .btn {
+            flex: 1;
+            padding: 10px;
+        }
+        
+        .btn-save {
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--white-text);
+            border: 1px solid var(--card-border);
+        }
+        
+        .btn-save:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        .no-results {
+            text-align: center;
+            padding: 50px;
+            grid-column: 1 / -1;
+            color: var(--gray-text);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-brand">
+                <i class="fa-solid fa-landmark-dome"></i> GovAssist
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="results.html" style="color: var(--accent-cyan)">Schemes</a>
+                <a href="eligibility.html">Eligibility</a>
+                <a href="chatbot.html">Chatbot</a>
+                <a href="profile.html">Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container results-container">
+        <div class="header-section">
+            <div class="reveal active">
+                <h2 class="text-gradient">Recommended Schemes</h2>
+                <p>Based on your profile, here are the schemes you are eligible for.</p>
+            </div>
+            
+            <div class="filters-container reveal active">
+                <div class="search-box">
+                    <i class="fa-solid fa-search"></i>
+                    <input type="text" class="form-control" id="searchInput" placeholder="Search schemes...">
+                </div>
+                <select class="form-control" id="categoryFilter" style="width: 150px;">
+                    <option value="all">All Categories</option>
+                    <option value="Farmer">Farmer</option>
+                    <option value="Student">Student</option>
+                    <option value="Women">Women</option>
+                    <option value="Healthcare">Healthcare</option>
+                    <option value="Employment">Employment</option>
+                </select>
+                <select class="form-control" id="sortFilter" style="width: 180px;">
+                    <option value="match_high">Highest Match %</option>
+                    <option value="match_low">Lowest Match %</option>
+                    <option value="deadline">Upcoming Deadline</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="schemes-grid" id="schemesContainer">
+            <!-- Schemes will be injected here dynamically -->
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-bottom">
+                &copy; 2026 GovAssist AI. All rights reserved. (Demo)
+            </div>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="main.js"></script>
+    <script src="results.js"></script>
+</body>
+</html>

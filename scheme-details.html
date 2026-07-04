@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scheme Details - GovAssist</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .details-container {
+            padding: 100px 20px 60px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .scheme-header {
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .eligibility-score {
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--primary-blue);
+            padding: 10px 20px;
+            border-radius: 30px;
+            font-weight: 700;
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            border: 1px solid rgba(37, 99, 235, 0.3);
+        }
+
+        .content-grid {
+            display: grid;
+            grid-template-columns: 2fr 1fr;
+            gap: 40px;
+        }
+
+        @media (max-width: 768px) {
+            .content-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .section-title {
+            color: var(--accent-cyan);
+            font-size: 1.3rem;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title i {
+            font-size: 1.5rem;
+        }
+
+        /* Checklists */
+        .checklist {
+            list-style: none;
+        }
+
+        .checklist li {
+            background: var(--card-bg);
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            border-radius: 8px;
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .checklist li i {
+            color: #10b981; /* Green check */
+            font-size: 1.2rem;
+        }
+
+        /* Timeline */
+        .timeline {
+            position: relative;
+            padding-left: 30px;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 0;
+            bottom: 0;
+            width: 2px;
+            background: var(--card-border);
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -32px;
+            top: 5px;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            background: var(--primary-blue);
+            border: 3px solid var(--dark-bg);
+        }
+
+        .timeline-item h4 {
+            color: var(--white-text);
+            margin-bottom: 5px;
+        }
+
+        /* FAQ Accordion */
+        .faq-item {
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 8px;
+            margin-bottom: 15px;
+            overflow: hidden;
+        }
+
+        .faq-header {
+            padding: 20px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+        }
+
+        .faq-content {
+            padding: 0 20px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease, padding 0.3s ease;
+            color: var(--gray-text);
+        }
+
+        .faq-item.active .faq-content {
+            padding: 0 20px 20px;
+            max-height: 200px;
+        }
+
+        .faq-item.active .faq-header i {
+            transform: rotate(180deg);
+        }
+        
+        .faq-header i {
+            transition: transform 0.3s;
+        }
+
+        /* Sidebar Action Box */
+        .action-box {
+            position: sticky;
+            top: 100px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <a href="index.html" class="nav-brand">
+                <i class="fa-solid fa-landmark-dome"></i> GovAssist
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="results.html" style="color: var(--accent-cyan)">Schemes</a>
+                <a href="eligibility.html">Eligibility</a>
+                <a href="chatbot.html">Chatbot</a>
+                <a href="profile.html">Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="details-container">
+        <!-- Header -->
+        <div class="scheme-header reveal active">
+            <div class="eligibility-score">
+                <i class="fa-solid fa-bolt"></i> 95% Match Score
+            </div>
+            <h1>PM Kisan Samman Nidhi Yojana</h1>
+            <p style="font-size: 1.1rem;">Income support scheme for all landholding farmer families across the country to assist them in meeting their financial needs.</p>
+        </div>
+
+        <div class="content-grid">
+            <!-- Left Main Content -->
+            <div class="main-content">
+                
+                <!-- Benefits -->
+                <section class="mb-5 reveal">
+                    <h2 class="section-title"><i class="fa-solid fa-gift"></i> Key Benefits</h2>
+                    <ul class="checklist">
+                        <li><i class="fa-solid fa-circle-check"></i> Financial support of ₹6,000 per year.</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Transferred directly to the bank account (DBT) in 3 equal installments.</li>
+                        <li><i class="fa-solid fa-circle-check"></i> No intermediaries, 100% transparent process.</li>
+                    </ul>
+                </section>
+
+                <!-- Eligibility -->
+                <section class="mb-5 reveal">
+                    <h2 class="section-title"><i class="fa-solid fa-user-check"></i> Eligibility Criteria</h2>
+                    <ul class="checklist">
+                        <li><i class="fa-solid fa-circle-check"></i> Must be a citizen of India.</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Must own cultivable land as per land records.</li>
+                        <li><i class="fa-solid fa-circle-check"></i> Not applicable for institutional land holders or high-income professionals.</li>
+                    </ul>
+                </section>
+
+                <!-- Documents -->
+                <section class="mb-5 reveal">
+                    <h2 class="section-title"><i class="fa-solid fa-file-lines"></i> Required Documents</h2>
+                    <ul class="checklist">
+                        <li><i class="fa-solid fa-file"></i> Aadhaar Card</li>
+                        <li><i class="fa-solid fa-file"></i> Land holding papers (Record of Right)</li>
+                        <li><i class="fa-solid fa-file"></i> Active Bank Account Number</li>
+                        <li><i class="fa-solid fa-file"></i> Passport size photograph</li>
+                    </ul>
+                </section>
+
+                <!-- Timeline -->
+                <section class="mb-5 reveal">
+                    <h2 class="section-title"><i class="fa-solid fa-route"></i> Application Process</h2>
+                    <div class="timeline">
+                        <div class="timeline-item">
+                            <h4>Step 1: Submit Application</h4>
+                            <p>Fill out the online form and upload required documents.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Step 2: Document Verification</h4>
+                            <p>Local authorities will verify your land records (Takes 7-10 days).</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Step 3: Approval & DBT Setup</h4>
+                            <p>Once approved, your bank account is linked for Direct Benefit Transfer.</p>
+                        </div>
+                        <div class="timeline-item">
+                            <h4>Step 4: Fund Disbursement</h4>
+                            <p>First installment of ₹2000 is credited to your account.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- FAQ -->
+                <section class="mb-5 reveal">
+                    <h2 class="section-title"><i class="fa-solid fa-circle-question"></i> Frequently Asked Questions</h2>
+                    <div class="faq-container">
+                        <div class="faq-item">
+                            <div class="faq-header">
+                                Is it applicable for tenant farmers?
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-content">
+                                No, currently the scheme is only applicable for landholding farmer families whose names are registered in the land records.
+                            </div>
+                        </div>
+                        <div class="faq-item">
+                            <div class="faq-header">
+                                How can I check my application status?
+                                <i class="fa-solid fa-chevron-down"></i>
+                            </div>
+                            <div class="faq-content">
+                                You can check your status on the official portal using your Aadhaar number or Bank Account number.
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Right Sidebar -->
+            <div class="sidebar">
+                <div class="glass-card action-box reveal active">
+                    <h3 class="mb-3">Ready to Apply?</h3>
+                    <p class="mb-4" style="font-size: 0.9rem;">You have a 95% match score. You have all the prerequisites to apply successfully.</p>
+                    
+                    <button class="btn btn-primary btn-glow mb-3" style="width: 100%;">
+                        <i class="fa-solid fa-paper-plane"></i> Apply Now
+                    </button>
+                    
+                    <button class="btn btn-outline mb-3" style="width: 100%;">
+                        <i class="fa-solid fa-download"></i> Download Brochure PDF
+                    </button>
+                    
+                    <button class="btn btn-save" style="width: 100%; border: 1px solid var(--card-border); background: rgba(255,255,255,0.05); color: white;">
+                        <i class="fa-regular fa-bookmark"></i> Save to Profile
+                    </button>
+                    
+                    <div style="margin-top: 20px; font-size: 0.85rem; color: var(--gray-text); text-align: center;">
+                        <i class="fa-regular fa-calendar"></i> Deadline: <strong>31 Dec 2026</strong>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        // FAQ Toggle Logic
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqItems = document.querySelectorAll('.faq-item');
+            
+            faqItems.forEach(item => {
+                const header = item.querySelector('.faq-header');
+                header.addEventListener('click', () => {
+                    // Close others
+                    faqItems.forEach(otherItem => {
+                        if (otherItem !== item) {
+                            otherItem.classList.remove('active');
+                        }
+                    });
+                    // Toggle current
+                    item.classList.toggle('active');
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Profile - GovAssist</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .profile-container {
+            padding: 100px 20px 60px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .profile-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+
+        @media (max-width: 768px) {
+            .profile-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Sidebar */
+        .profile-sidebar {
+            text-align: center;
+        }
+
+        .profile-pic-container {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 20px;
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid var(--accent-cyan);
+        }
+
+        .edit-pic-btn {
+            position: absolute;
+            bottom: 5px;
+            right: 5px;
+            background: var(--primary-blue);
+            color: white;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            border: 2px solid var(--dark-bg);
+            transition: var(--transition-fast);
+        }
+
+        .edit-pic-btn:hover {
+            background: var(--secondary-purple);
+        }
+
+        .profile-nav {
+            margin-top: 30px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .profile-nav-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 12px 20px;
+            border-radius: 8px;
+            color: var(--gray-text);
+            cursor: pointer;
+            transition: var(--transition-fast);
+        }
+
+        .profile-nav-item:hover, .profile-nav-item.active {
+            background: rgba(37, 99, 235, 0.1);
+            color: var(--accent-cyan);
+        }
+
+        /* Main Content */
+        .profile-content-section {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .profile-content-section.active {
+            display: block;
+        }
+
+        .saved-scheme-card {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.03);
+            border-radius: 12px;
+            margin-bottom: 15px;
+            border: 1px solid var(--card-border);
+            transition: var(--transition-fast);
+        }
+
+        .saved-scheme-card:hover {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .scheme-meta {
+            display: flex;
+            gap: 15px;
+            margin-top: 10px;
+            font-size: 0.85rem;
+            color: var(--gray-text);
+        }
+
+        /* Toggle Switch */
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: var(--darker-bg);
+            border: 1px solid var(--card-border);
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 16px;
+            width: 16px;
+            left: 3px;
+            bottom: 3px;
+            background-color: var(--gray-text);
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: var(--primary-blue);
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(26px);
+            background-color: white;
+        }
+        
+        .settings-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid var(--card-border);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar scrolled">
+        <div class="container">
+            <a href="index.html" class="nav-brand">
+                <i class="fa-solid fa-landmark-dome"></i> GovAssist
+            </a>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="results.html">Schemes</a>
+                <a href="eligibility.html">Eligibility</a>
+                <a href="chatbot.html">Chatbot</a>
+                <a href="profile.html" style="color: var(--accent-cyan)">Profile</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="profile-container reveal active">
+        <div class="profile-grid">
+            
+            <!-- Sidebar -->
+            <div class="glass-card profile-sidebar">
+                <div class="profile-pic-container">
+                    <img src="https://ui-avatars.com/api/?name=User&background=2563eb&color=fff&size=150" alt="Profile" id="profileAvatar" class="profile-pic">
+                    <div class="edit-pic-btn" title="Upload Picture">
+                        <i class="fa-solid fa-camera"></i>
+                    </div>
+                </div>
+                <h3 id="profileNameDisplay">User</h3>
+                <p id="profileSubtextDisplay">Loading...</p>
+                
+                <div class="profile-nav">
+                    <div class="profile-nav-item active" data-target="personalInfo">
+                        <i class="fa-solid fa-user"></i> Personal Info
+                    </div>
+                    <div class="profile-nav-item" data-target="savedSchemes">
+                        <i class="fa-solid fa-bookmark"></i> Saved Schemes
+                    </div>
+                    <div class="profile-nav-item" data-target="history">
+                        <i class="fa-solid fa-clock-rotate-left"></i> Application History
+                    </div>
+                    <div class="profile-nav-item" data-target="settings">
+                        <i class="fa-solid fa-gear"></i> Settings
+                    </div>
+                    <div class="profile-nav-item" id="logoutBtn" style="color: #ef4444; margin-top: 20px;">
+                        <i class="fa-solid fa-right-from-bracket"></i> Logout
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content -->
+            <div class="glass-card">
+                
+                <!-- Personal Info Section -->
+                <div class="profile-content-section active" id="personalInfo">
+                    <h2 class="mb-4 text-gradient">Edit Profile</h2>
+                    <form>
+                        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+                            <div class="input-group">
+                                <label>Full Name</label>
+                                <input type="text" class="form-control" id="profileNameInput" value="">
+                            </div>
+                            <div class="input-group">
+                                <label>Email</label>
+                                <input type="email" class="form-control" id="profileEmailInput" value="">
+                            </div>
+                            <div class="input-group">
+                                <label>Phone</label>
+                                <input type="text" class="form-control" id="profilePhoneInput" value="">
+                            </div>
+                            <div class="input-group">
+                                <label>State</label>
+                                <input type="text" class="form-control" id="profileStateInput" value="">
+                            </div>
+                            <div class="input-group">
+                                <label>Occupation</label>
+                                <input type="text" class="form-control" id="profileOccupationInput" value="">
+                            </div>
+                            <div class="input-group">
+                                <label>Annual Income</label>
+                                <input type="text" class="form-control" id="profileIncomeInput" value="">
+                            </div>
+                        </div>
+                        <button type="button" id="saveProfileBtn" class="btn btn-primary btn-glow mt-3">Save Changes</button>
+                    </form>
+                </div>
+
+                <!-- Saved Schemes Section -->
+                <div class="profile-content-section" id="savedSchemes">
+                    <h2 class="mb-4 text-gradient">Saved Schemes</h2>
+                    
+                    <div class="saved-scheme-card">
+                        <div>
+                            <h4>PM Kisan Samman Nidhi</h4>
+                            <div class="scheme-meta">
+                                <span><i class="fa-solid fa-tag"></i> Farmer</span>
+                                <span><i class="fa-solid fa-bolt" style="color: var(--accent-cyan)"></i> 95% Match</span>
+                            </div>
+                        </div>
+                        <a href="scheme-details.html" class="btn btn-outline">Apply Now</a>
+                    </div>
+                    
+                    <div class="saved-scheme-card">
+                        <div>
+                            <h4>Ayushman Bharat</h4>
+                            <div class="scheme-meta">
+                                <span><i class="fa-solid fa-tag"></i> Healthcare</span>
+                                <span><i class="fa-solid fa-bolt" style="color: var(--accent-cyan)"></i> 100% Match</span>
+                            </div>
+                        </div>
+                        <a href="#" class="btn btn-outline">Apply Now</a>
+                    </div>
+                </div>
+
+                <!-- History Section -->
+                <div class="profile-content-section" id="history">
+                    <h2 class="mb-4 text-gradient">Application History</h2>
+                    <p style="color: var(--gray-text);">Track your recent eligibility checks and scheme applications.</p>
+                    
+                    <div class="saved-scheme-card" style="opacity: 0.8;">
+                        <div>
+                            <h4>Check Eligibility Run</h4>
+                            <div class="scheme-meta">
+                                <span><i class="fa-regular fa-calendar"></i> 04 July 2026</span>
+                                <span>Found 5 eligible schemes</span>
+                            </div>
+                        </div>
+                        <span style="color: #10b981; font-weight: 600;"><i class="fa-solid fa-check"></i> Completed</span>
+                    </div>
+                </div>
+
+                <!-- Settings Section -->
+                <div class="profile-content-section" id="settings">
+                    <h2 class="mb-4 text-gradient">Account Settings</h2>
+                    
+                    <div class="settings-row">
+                        <div>
+                            <h4>Email Notifications</h4>
+                            <p style="font-size: 0.85rem; color: var(--gray-text);">Receive updates about new schemes</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                    
+                    <div class="settings-row">
+                        <div>
+                            <h4>SMS Alerts</h4>
+                            <p style="font-size: 0.85rem; color: var(--gray-text);">Receive deadline reminders via SMS</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+
+                    <div class="settings-row">
+                        <div>
+                            <h4>Dark Mode</h4>
+                            <p style="font-size: 0.85rem; color: var(--gray-text);">Toggle website theme</p>
+                        </div>
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked id="darkModeToggle">
+                            <span class="slider"></span>
+                        </label>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const navItems = document.querySelectorAll('.profile-nav-item[data-target]');
+            const sections = document.querySelectorAll('.profile-content-section');
+
+            navItems.forEach(item => {
+                item.addEventListener('click', () => {
+                    // Remove active from all navs and sections
+                    navItems.forEach(n => n.classList.remove('active'));
+                    sections.forEach(s => s.classList.remove('active'));
+
+                    // Add active to clicked nav and corresponding section
+                    item.classList.add('active');
+                    const targetId = item.getAttribute('data-target');
+                    document.getElementById(targetId).classList.add('active');
+                });
+            });
+        });
+    </script>
+    <div id="toast" class="toast"></div>
+    <script type="module" src="dashboard.js"></script>
+</body>
+</html>

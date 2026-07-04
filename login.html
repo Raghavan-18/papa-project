@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login / Signup - GovAssist</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="components.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 100px 20px 40px;
+        }
+
+        .auth-card {
+            width: 100%;
+            max-width: 500px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 30px;
+            border-bottom: 1px solid var(--card-border);
+        }
+
+        .auth-tab {
+            flex: 1;
+            text-align: center;
+            padding: 15px;
+            cursor: pointer;
+            font-weight: 600;
+            color: var(--gray-text);
+            transition: var(--transition-fast);
+            position: relative;
+        }
+
+        .auth-tab.active {
+            color: var(--accent-cyan);
+        }
+
+        .auth-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -1px;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--gradient-accent);
+        }
+
+        .auth-form {
+            display: none;
+            animation: fadeIn 0.4s ease;
+        }
+
+        .auth-form.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .password-container {
+            position: relative;
+        }
+
+        .toggle-password {
+            position: absolute;
+            right: 15px;
+            top: 40px;
+            color: var(--gray-text);
+            cursor: pointer;
+        }
+
+        .auth-options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 0.9rem;
+        }
+
+        .auth-options a {
+            color: var(--accent-cyan);
+            text-decoration: none;
+        }
+
+        .auth-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--gray-text);
+            cursor: pointer;
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--primary-blue);
+            color: white;
+            padding: 15px 25px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+            transform: translateY(100px);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 9999;
+        }
+        
+        .toast.show {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="container">
+            <a href="index.html" class="nav-brand">
+                <i class="fa-solid fa-landmark-dome"></i> GovAssist
+            </a>
+            <button class="nav-toggle">
+                <i class="fa-solid fa-bars"></i>
+            </button>
+            <div class="nav-links">
+                <a href="index.html">Home</a>
+                <a href="results.html">Schemes</a>
+                <a href="eligibility.html">Eligibility</a>
+                <a href="chatbot.html">Chatbot</a>
+                <a href="contact.html">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <div class="auth-container">
+        <div class="glass-card auth-card reveal active">
+            <div class="auth-tabs">
+                <div class="auth-tab active" data-target="login">Login</div>
+                <div class="auth-tab" data-target="signup">Sign Up</div>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" class="auth-form active">
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" class="form-control" id="loginEmail" placeholder="Enter your email" required>
+                </div>
+                <div class="input-group password-container">
+                    <label>Password</label>
+                    <input type="password" class="form-control" id="loginPassword" placeholder="Enter your password" required>
+                    <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('loginPassword')"></i>
+                </div>
+                <div class="auth-options">
+                    <label>
+                        <input type="checkbox"> Remember me
+                    </label>
+                    <a href="#" onclick="showToast('Password reset link sent to your email.')">Forgot password?</a>
+                </div>
+                <button type="submit" class="btn btn-primary btn-glow" style="width: 100%; margin-bottom: 15px;">Login</button>
+                <div style="text-align: center; margin-bottom: 15px; color: var(--gray-text);">OR</div>
+                <button type="button" id="googleSignInBtn" class="btn btn-outline" style="width: 100%; display: flex; align-items: center; justify-content: center; gap: 10px;">
+                    <i class="fa-brands fa-google"></i> Sign in with Google
+                </button>
+            </form>
+
+            <!-- Signup Form -->
+            <form id="signupForm" class="auth-form">
+                <div class="input-group">
+                    <label>Full Name</label>
+                    <input type="text" class="form-control" id="signupName" placeholder="Enter full name" required>
+                </div>
+                <div class="input-group">
+                    <label>Email Address</label>
+                    <input type="email" class="form-control" id="signupEmail" placeholder="Enter email" required>
+                </div>
+                <div class="input-group">
+                    <label>Phone Number</label>
+                    <input type="tel" class="form-control" id="signupPhone" placeholder="Enter phone number" required>
+                </div>
+                
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label>State</label>
+                        <select class="form-control" id="signupState" required>
+                            <option value="">Select State</option>
+                            <option value="an">Andaman and Nicobar Islands</option>
+                            <option value="ap">Andhra Pradesh</option>
+                            <option value="ar">Arunachal Pradesh</option>
+                            <option value="as">Assam</option>
+                            <option value="br">Bihar</option>
+                            <option value="ch">Chandigarh</option>
+                            <option value="ct">Chhattisgarh</option>
+                            <option value="dn">Dadra and Nagar Haveli and Daman and Diu</option>
+                            <option value="dl">Delhi</option>
+                            <option value="ga">Goa</option>
+                            <option value="gj">Gujarat</option>
+                            <option value="hr">Haryana</option>
+                            <option value="hp">Himachal Pradesh</option>
+                            <option value="jk">Jammu and Kashmir</option>
+                            <option value="jh">Jharkhand</option>
+                            <option value="ka">Karnataka</option>
+                            <option value="kl">Kerala</option>
+                            <option value="la">Ladakh</option>
+                            <option value="ld">Lakshadweep</option>
+                            <option value="mp">Madhya Pradesh</option>
+                            <option value="mh">Maharashtra</option>
+                            <option value="mn">Manipur</option>
+                            <option value="ml">Meghalaya</option>
+                            <option value="mz">Mizoram</option>
+                            <option value="nl">Nagaland</option>
+                            <option value="or">Odisha</option>
+                            <option value="py">Puducherry</option>
+                            <option value="pb">Punjab</option>
+                            <option value="rj">Rajasthan</option>
+                            <option value="sk">Sikkim</option>
+                            <option value="tn">Tamil Nadu</option>
+                            <option value="tg">Telangana</option>
+                            <option value="tr">Tripura</option>
+                            <option value="up">Uttar Pradesh</option>
+                            <option value="ut">Uttarakhand</option>
+                            <option value="wb">West Bengal</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>Occupation</label>
+                        <select class="form-control" id="signupOccupation" required>
+                            <option value="">Select</option>
+                            <option value="farmer">Farmer</option>
+                            <option value="student">Student</option>
+                            <option value="business">Business</option>
+                            <option value="salaried">Salaried</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-group password-container">
+                    <label>Password</label>
+                    <input type="password" class="form-control" id="signupPassword" placeholder="Create password" required>
+                    <i class="fa-solid fa-eye toggle-password" onclick="togglePassword('signupPassword')"></i>
+                </div>
+                <div class="input-group password-container">
+                    <label>Confirm Password</label>
+                    <input type="password" class="form-control" id="signupConfirm" placeholder="Confirm password" required>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-glow" style="width: 100%;">Create Account</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <script src="main.js"></script>
+    <script type="module" src="auth.js"></script>
+</body>
+</html>
